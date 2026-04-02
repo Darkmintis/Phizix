@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import '../constants/api_constants.dart';
-import 'package:flutter/foundation.dart';
+import 'dio_interceptor.dart';
 
 class DioClient {
   late final Dio _dio;
@@ -17,21 +17,9 @@ class DioClient {
   }
 
   Dio get dio => _dio;
+  
   void _setupInterceptors(){
-    _dio.interceptors.add(InterceptorsWrapper(
-      onRequest: (options, handler){
-        debugPrint('Request: ${options.method} ${options.path}');
-        return handler.next(options);
-      },
-      onResponse: (response, handler) {
-        debugPrint('Response: ${response.statusCode} ${response.requestOptions.path}');
-        return handler.next(response);
-      },
-      onError: (error, handler){
-        debugPrint('Error: ${error.message}');
-        return handler.next(error);
-      },
-    ));
+    _dio.interceptors.add(LoggingInterceptor());
   }
 
   void dispose(){
