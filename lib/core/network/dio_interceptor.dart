@@ -13,8 +13,8 @@ class LoggingInterceptor extends Interceptor{
         handler.next(response);
       }
       @override
-     void onError(DioException error, ErrorInterceptorHandler handler){
-        debugPrint('Error: ${error.message}');
-        handler.next(error);
+     void onError(DioException err, ErrorInterceptorHandler handler){
+        debugPrint('Error: ${err.message}');
+        handler.next(err);
       }
 }
