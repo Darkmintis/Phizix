@@ -9,7 +9,6 @@ class ArticleRepository {
   ArticleRepository(this._apiService);
 
   Future<List<Article>> getArticles({int page = 1}) async {
-    try {
       final response = await _apiService.get(
         ApiConstants.articleEndpoint,
         queryParams: {'page': page},
@@ -20,13 +19,9 @@ class ArticleRepository {
         return results.map((json) => Article.fromJson(json)).toList();
       }
       return [];
-    } catch (e) {
-      throw Exception('Failed to fetch articles: $e');
     }
-  }
 
   Future<Map<String, dynamic>> getArticlesWithPagination({int page = 1}) async{
-    try {
       final response = await _apiService.get(
         ApiConstants.articleEndpoint,
         queryParams: {'page': page},
@@ -46,17 +41,10 @@ class ArticleRepository {
         };
       }
       return {'articles': <Article>[], 'currentPage': 1, 'totalPages': 1, 'totalItems': 0};
-    } catch (e){
-      throw Exception('Failed to fetch articles: $e');
     }
-  }
 
   Future<Article> getArticleBySlug(String slug) async{
-    try{
       final response = await _apiService.get('/article/$slug');
       return Article.fromJson(response);
-    } catch (e){
-      throw Exception('Failed to fetch article: $e');
     }
-  }
 }
