@@ -1,78 +1,124 @@
 import 'package:dio/dio.dart';
 import '../network/dio_client.dart';
+import 'api_exception.dart';
 
 class ApiService {
   final DioClient _dioClient;
   ApiService(this._dioClient);
 
-  Future<dynamic> get(String endpoint, {Map<String, dynamic>? queryParams}) async{
-    try{
+  Future<dynamic> get(String endpoint,
+      {Map<String, dynamic>? queryParams}) async {
+    try {
       final response = await _dioClient.dio.get(
         endpoint,
         queryParameters: queryParams,
       );
       return response.data;
-    } on DioException catch (e){
+    } on DioException catch (e) {
       throw _handleError(e);
     }
   }
 
-  Future<dynamic> post(String endpoint, {Map<String, dynamic>? data}) async{
-    try{
+  Future<dynamic> post(String endpoint,
+      {Map<String, dynamic>? data}) async {
+    try {
       final response = await _dioClient.dio.post(
         endpoint,
         data: data,
       );
       return response.data;
-    } on DioException catch (e){
+    } on DioException catch (e) {
       throw _handleError(e);
     }
   }
 
-  Future<dynamic> put(String endpoint, {Map<String, dynamic>? data}) async{
-    try{
+  Future<dynamic> put(String endpoint,
+      {Map<String, dynamic>? data}) async {
+    try {
       final response = await _dioClient.dio.put(
         endpoint,
         data: data,
       );
       return response.data;
-    } on DioException catch (e){
+    } on DioException catch (e) {
       throw _handleError(e);
     }
   }
 
-  Future<dynamic> delete(String endpoint) async{
-    try{
+  Future<dynamic> delete(String endpoint) async {
+    try {
       final response = await _dioClient.dio.delete(endpoint);
       return response.data;
-    } on DioException catch(e){
+    } on DioException catch (e) {
       throw _handleError(e);
     }
   }
-  String _handleError(DioException error) {
-    if (error.response != null) {
-      switch (error.response!.statusCode) {
+
+  ApiException _handleError(DioException error) {
+    final statusCode = error.response?.statusCode;
+
+    if (statusCode != null) {
+      switch (statusCode) {
         case 400:
-          return 'Bad request';
+          return ApiException(
+            message: "Invalid request",
+            statusCode: 400,
+            type: "bad_request",
+          );
         case 401:
-          return 'Unauthorized';
+          return ApiException(
+            message: "Unauthorized",
+            statusCode: 401,
+            type: "auth_error",
+          );
         case 403:
-          return 'Forbidden';
+          return ApiException(
+            message: "Access denied",
+            statusCode: 403,
+            type: "forbidden",
+          );
         case 404:
-          return 'Not found';
+          return ApiException(
+            message: "Data not found",
+            statusCode: 404,
+            type: "not_found",
+          );
         case 500:
-          return 'Internal server error';
+          return ApiException(
+            message: "Server error",
+            statusCode: 500,
+            type: "server_error",
+          );
         default:
-          return 'Something went wrong';
+          return ApiException(
+            message: "Unexpected error",
+            statusCode: statusCode,
+            type: "unknown",
+          );
       }
-    } else if (error.type == DioExceptionType.connectionTimeout) {
-      return 'Connection timeout';
-    } else if (error.type == DioExceptionType.receiveTimeout) {
-      return 'Receive timeout';
-    } else if (error.type == DioExceptionType.cancel) {
-      return 'Request cancelled';
-    } else {
-      return 'No internet connection';
+    }
+
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+        return ApiException(
+          message: "Connection timeout",
+          type: "timeout",
+        );
+      case DioExceptionType.receiveTimeout:
+        return ApiException(
+          message: "Receive timeout",
+          type: "timeout",
+        );
+      case DioExceptionType.cancel:
+        return ApiException(
+          message: "Request cancelled",
+          type: "cancelled",
+        );
+      default:
+        return ApiException(
+          message: "No internet connection",
+          type: "network",
+        );
     }
   }
 }
