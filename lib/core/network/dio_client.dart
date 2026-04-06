@@ -19,7 +19,7 @@ class DioClient {
   Dio get dio => _dio;
   
   void _setupInterceptors(){
-    _dio.interceptors.add(LoggingInterceptor());
+    _dio.interceptors.add(AppInterceptor());
   }
 
   void dispose(){

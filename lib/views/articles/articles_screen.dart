@@ -22,13 +22,7 @@ class _ArticlesContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ArticlesViewModel>();
-    
-    // Load articles when screen first appears
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (viewModel.state == ViewState.idle) {
-        viewModel.loadArticles();
-      }
-    });
+  
 
     // Handle different states
     switch (viewModel.state) {
