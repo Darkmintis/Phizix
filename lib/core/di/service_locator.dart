@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import '../network/dio_client.dart';
 import '../api/article_api.dart';
+import '../../views/articles/repositories/article_repository_impl.dart';
 import '../../views/articles/repositories/article_repository.dart';
 import '../../views/articles/articles_view_model.dart';
 import '../constants/api_constants.dart';
@@ -19,7 +20,7 @@ class ServiceLocator {
     
     // Repositories
     getIt.registerLazySingleton<ArticleRepository>(
-      () => ArticleRepository(getIt<ArticleApi>()),
+      () => ArticleRepositoryImpl(getIt<ArticleApi>()),
     );
     
     // ViewModels
