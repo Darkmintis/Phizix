@@ -80,9 +80,9 @@ void main() {
 
       final result = await repository.getArticlesWithPagination();
 
-      expect(result['articles'], isA<List<Article>>());
-      expect(result['currentPage'], 2);
-      expect(result['totalItems'], 20);
+      expect(result.articles, isA<List<Article>>());
+      expect(result.currentPage, 2);
+      expect(result.totalItems, 20);
     });
 
     test('returns default values when pagination keys are missing', () async {
@@ -94,8 +94,8 @@ void main() {
 
       final result = await repository.getArticlesWithPagination();
 
-      expect(result['currentPage'], 1);
-      expect(result['totalItems'], 0);
+      expect(result.currentPage, 1);
+      expect(result.totalItems, 0);
     });
 
   });
