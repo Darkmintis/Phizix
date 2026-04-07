@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:phizix/core/services/api_exception.dart';
-import 'repositories/article_repository.dart';
-import 'models/article_model.dart';
+import '../repositories/article_repository.dart';
+import '../models/article_model.dart';
 
 enum ViewState { idle, loading, success, error }
 

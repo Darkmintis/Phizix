@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:phizix/views/articles/models/article_detail_model.dart';
 import 'package:retrofit/retrofit.dart';
-import '../../views/articles/models/article_model.dart';
 import '../../views/articles/models/article_response.dart';
 
 part 'article_api.g.dart';
@@ -13,5 +13,5 @@ abstract class ArticleApi {
   Future<ArticleResponse> getArticles(@Query("page") int page);
 
   @GET('/article/{slug}')
-  Future<Article> getArticleBySlug(@Path("slug") String slug);
+  Future<ArticleDetailModel> getArticleBySlug(@Path("slug") String slug);
 }

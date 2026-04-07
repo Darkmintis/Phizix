@@ -23,7 +23,7 @@ class Article {
       content: json['content'] ?? '', 
       featureImage: json['featureImage'] ?? '',
       publishedAt: json['publishedAt'] != null
-      ? DateTime.parse(json['publishedAt'] as String)
+      ? DateTime.tryParse(json['publishedAt'].toString()) ?? DateTime.now()
       : DateTime.now(),
     );
   }

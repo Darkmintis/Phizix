@@ -1,3 +1,4 @@
+import 'package:phizix/views/articles/models/article_detail_model.dart';
 import 'package:phizix/views/articles/models/article_pagination.dart';
 import '../../../core/api/article_api.dart';
 import '../models/article_model.dart';
@@ -24,5 +25,13 @@ class ArticleRepositoryImpl implements ArticleRepository{
     totalPages: response.pagination['total_pages'] ?? 1,
     totalItems: response.pagination['count'] ?? 0,
   );
-}
+  }
+
+  @override  
+  Future<ArticleDetailModel> getArticleBySlug(String slug) async{
+    final response = await _api.getArticleBySlug(slug);    
+    return response;
+  }
+
+
 }

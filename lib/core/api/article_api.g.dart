@@ -47,12 +47,12 @@ class _ArticleApi implements ArticleApi {
   }
 
   @override
-  Future<Article> getArticleBySlug(String slug) async {
+  Future<ArticleDetailModel> getArticleBySlug(String slug) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<Article>(
+    final _options = _setStreamType<ArticleDetailModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -63,9 +63,9 @@ class _ArticleApi implements ArticleApi {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late Article _value;
+    late ArticleDetailModel _value;
     try {
-      _value = Article.fromJson(_result.data!);
+      _value = ArticleDetailModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

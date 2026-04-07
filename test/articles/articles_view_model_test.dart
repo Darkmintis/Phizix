@@ -4,7 +4,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:phizix/core/services/api_exception.dart';
 import 'package:phizix/views/articles/models/article_model.dart';
 import 'package:phizix/views/articles/repositories/article_repository.dart';
-import 'package:phizix/views/articles/articles_view_model.dart';
+import 'package:phizix/views/articles/viewmodel/articles_view_model.dart';
 
 class MockArticleRepository extends Mock implements ArticleRepository{}
 

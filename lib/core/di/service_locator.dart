@@ -3,7 +3,8 @@ import '../network/dio_client.dart';
 import '../api/article_api.dart';
 import '../../views/articles/repositories/article_repository_impl.dart';
 import '../../views/articles/repositories/article_repository.dart';
-import '../../views/articles/articles_view_model.dart';
+import '../../views/articles/viewmodel/articles_view_model.dart';
+import '../../views/articles/viewmodel/article_detail_viewmodel.dart';
 import '../constants/api_constants.dart';
 
 final getIt = GetIt.instance;
@@ -13,7 +14,7 @@ class ServiceLocator {
     // Network
     getIt.registerLazySingleton<DioClient>(() => DioClient());
     
-    // Services
+    // API
     getIt.registerLazySingleton<ArticleApi>(() => ArticleApi(
       getIt<DioClient>().dio,
     baseUrl: ApiConstants.baseUrl));
@@ -26,6 +27,10 @@ class ServiceLocator {
     // ViewModels
     getIt.registerFactory<ArticlesViewModel>(
       () => ArticlesViewModel(getIt<ArticleRepository>()),
+    );
+
+    getIt.registerFactory<ArticleDetailViewModel>(
+      () => ArticleDetailViewModel(getIt<ArticleRepository>()),
     );
   }
   

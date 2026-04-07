@@ -9,12 +9,13 @@ class ArticleResponse {
     required this.pagination,
   });
 
-  factory ArticleResponse.fromJson(Map<String, dynamic> json){
+  factory ArticleResponse.fromJson(Map<String, dynamic> json) {
     return ArticleResponse(
-      results: (json['results'] as List)
-      .map((e) => Article.fromJson(e))
-      .toList(),
-      pagination: json['pagination'] ?? {},
+      results: (json['results'] as List<dynamic>? ?? [])
+          .map((e) => Article.fromJson(e as Map<String, dynamic>))
+          .toList(),
+
+      pagination: json['pagination'] as Map<String, dynamic>? ?? {},
     );
-}
+  }
 }

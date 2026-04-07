@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/views/articles/screens/article_details_screen.dart';
 import '../models/article_model.dart';
 
 class ArticleCard extends StatelessWidget {
@@ -19,8 +20,12 @@ class ArticleCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // We'll add navigation to detail screen later
-          debugPrint('Article tapped: ${article.title}');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => ArticleDetailsScreen(slug: article.slug),
+            ),
+            );
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

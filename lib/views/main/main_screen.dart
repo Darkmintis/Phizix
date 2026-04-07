@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../shared/widgets/phizix_app_bar.dart';
-import '../articles/articles_screen.dart';
+import '../articles/screens/articles_screen.dart';
 import '../categories/categories_screen.dart';
 import '../tags/tags_screen.dart';
 import '../authors/authors_screen.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'articles_view_model.dart';
-import '../../core/di/service_locator.dart';
-import 'widgets/article_card.dart';
+import '../viewmodel/articles_view_model.dart';
+import '../../../core/di/service_locator.dart';
+import '../widgets/article_card.dart';
 
 class ArticlesScreen extends StatelessWidget {
   const ArticlesScreen({super.key});
