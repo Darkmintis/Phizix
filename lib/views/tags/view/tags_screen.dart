@@ -35,18 +35,58 @@ class _Body extends StatelessWidget {
     }
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Tags")),
-      body: ListView.builder(
-        itemCount: vm.tags.length,
-        itemBuilder: (context, index) {
-          final tag = vm.tags[index];
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: ListView.builder(
+          itemCount: vm.tags.length,
+          itemBuilder: (context, index) {
+            final tag = vm.tags[index];
 
-          return ListTile(
-            title: Text(tag.name!),
-            trailing: Text("${tag.articleCount}"),
-            
-          );
-        },
+            return Container(
+              margin: const EdgeInsets.only(bottom: 10),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Colors.grey.shade300,
+                  width: 1.2,
+                ),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    tag.name ?? "",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.withValues(alpha:0.1),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      "${tag.articleCount ?? 0}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }
