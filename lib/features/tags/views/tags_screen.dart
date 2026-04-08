@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/di/service_locator.dart';
 import 'package:provider/provider.dart';
-import '../viewmodel/tag_view_model.dart';
+import '../viewmodels/tag_view_model.dart';
 
 class TagsScreen extends StatelessWidget {
   const TagsScreen({super.key});

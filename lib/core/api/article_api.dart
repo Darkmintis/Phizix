@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:phizix/views/articles/models/article_detail_model.dart';
-import 'package:phizix/views/categories/models/category_model.dart';
-import 'package:phizix/views/tags/models/tag_model.dart';
-import '../../views/authors/models/author_model.dart';
+import 'package:phizix/features/articles/models/article_detail_model.dart';
+import 'package:phizix/features/categories/models/category_model.dart';
+import 'package:phizix/features/tags/models/tag_model.dart';
+import '../../features/authors/models/author_model.dart';
 import 'package:retrofit/retrofit.dart';
-import '../../views/articles/models/article_response.dart';
+import '../../features/articles/models/article_response.dart';
 
 part 'article_api.g.dart';
 

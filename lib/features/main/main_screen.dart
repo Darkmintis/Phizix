@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../shared/widgets/phizix_app_bar.dart';
-import '../articles/screens/articles_screen.dart';
-import '../categories/view/categories_screen.dart';
-import '../tags/view/tags_screen.dart';
-import '../authors/view/author_screen.dart';
+import '../articles/views/articles_screen.dart';
+import '../categories/views/categories_screen.dart';
+import '../tags/views/tags_screen.dart';
+import '../authors/views/author_screen.dart';
 import '../../core/providers/tab_index_provider.dart';
 
 class MainScreen extends StatelessWidget{

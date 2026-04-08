@@ -1,4 +1,4 @@
-import 'package:phizix/views/articles/models/article_model.dart';
+import 'package:phizix/features/articles/models/article_model.dart';
 
 class ArticlePagination {
   final List<Article> articles;

@@ -1,6 +1,6 @@
 import 'package:phizix/core/api/article_api.dart';
-import 'package:phizix/views/tags/models/tag_model.dart';
-import 'package:phizix/views/tags/repositories/tag_repository.dart';
+import 'package:phizix/features/tags/models/tag_model.dart';
+import 'package:phizix/features/tags/repositories/tag_repository.dart';
 
 class TagRepositoryImpl implements TagRepository{
   final ArticleApi api;

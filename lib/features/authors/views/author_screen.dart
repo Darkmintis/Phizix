@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/di/service_locator.dart';
 import 'package:provider/provider.dart';
-import '../viewmodel/author_view_model.dart';
+import '../viewmodels/author_view_model.dart';
 
 class AuthorsScreen extends StatelessWidget {
   const AuthorsScreen({super.key});

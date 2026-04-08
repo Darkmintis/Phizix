@@ -1,4 +1,4 @@
-import 'package:phizix/views/articles/models/article_detail_model.dart';
+import 'package:phizix/features/articles/models/article_detail_model.dart';
 import '../models/article_model.dart';
 import '../models/article_pagination.dart';
 

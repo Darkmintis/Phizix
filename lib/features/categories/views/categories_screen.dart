@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/di/service_locator.dart';
-import 'package:phizix/views/categories/viewmodel/category_view_model.dart';
+import 'package:phizix/features/categories/viewmodels/category_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatelessWidget {

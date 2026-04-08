@@ -1,10 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phizix/core/api/article_api.dart';
-import 'package:phizix/views/articles/models/article_model.dart';
-import 'package:phizix/views/articles/models/article_response.dart';
-import 'package:phizix/views/articles/repositories/article_repository.dart';
-import 'package:phizix/views/articles/repositories/article_repository_impl.dart';
+import 'package:phizix/features/articles/models/article_model.dart';
+import 'package:phizix/features/articles/models/article_response.dart';
+import 'package:phizix/features/articles/repositories/article_repository.dart';
+import 'package:phizix/features/articles/repositories/article_repository_impl.dart';
 
 class MockArticleApi extends Mock implements ArticleApi {}
 

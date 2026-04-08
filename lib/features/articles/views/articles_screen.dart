@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../viewmodel/articles_view_model.dart';
+import '../viewmodels/articles_view_model.dart';
 import '../../../core/di/service_locator.dart';
 import '../widgets/article_card.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../../core/di/service_locator.dart';
-import '../viewmodel/article_detail_viewmodel.dart';
+import '../viewmodels/article_detail_viewmodel.dart';
 
 class ArticleDetailsScreen extends StatelessWidget {
   final String slug;

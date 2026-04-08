@@ -2,9 +2,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phizix/core/services/api_exception.dart';
-import 'package:phizix/views/articles/models/article_model.dart';
-import 'package:phizix/views/articles/repositories/article_repository.dart';
-import 'package:phizix/views/articles/viewmodel/articles_view_model.dart';
+import 'package:phizix/features/articles/models/article_model.dart';
+import 'package:phizix/features/articles/repositories/article_repository.dart';
+import 'package:phizix/features/articles/viewmodels/articles_view_model.dart';
 
 class MockArticleRepository extends Mock implements ArticleRepository{}
 

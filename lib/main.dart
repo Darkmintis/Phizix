@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'views/main/main_screen.dart';
+import 'features/main/main_screen.dart';
 import 'core/di/service_locator.dart';
 
 void main() {

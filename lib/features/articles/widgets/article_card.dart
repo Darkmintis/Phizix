@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:phizix/views/articles/screens/article_details_screen.dart';
+import 'package:phizix/features/articles/views/article_details_screen.dart';
 import '../models/article_model.dart';
 
 class ArticleCard extends StatelessWidget {

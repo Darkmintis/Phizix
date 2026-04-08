@@ -1,5 +1,5 @@
-import 'package:phizix/views/articles/models/article_detail_model.dart';
-import 'package:phizix/views/articles/models/article_pagination.dart';
+import 'package:phizix/features/articles/models/article_detail_model.dart';
+import 'package:phizix/features/articles/models/article_pagination.dart';
 import '../../../core/api/article_api.dart';
 import '../models/article_model.dart';
 import 'article_repository.dart';

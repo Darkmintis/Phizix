@@ -1,6 +1,6 @@
 import 'package:phizix/core/api/article_api.dart';
-import 'package:phizix/views/categories/models/category_model.dart';
-import 'package:phizix/views/categories/repositories/category_repository.dart';
+import 'package:phizix/features/categories/models/category_model.dart';
+import 'package:phizix/features/categories/repositories/category_repository.dart';
 
 class CategoryRepositoryImpl implements CategoryRepository{
   final ArticleApi api;
