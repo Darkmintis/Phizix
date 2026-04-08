@@ -1,4 +1,4 @@
-package com.example.phizix
+package com.dipesh.phizix
 
 import io.flutter.embedding.android.FlutterActivity
 
