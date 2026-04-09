@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "369867054960",
+    "project_id": "phizix-testu",
+    "storage_bucket": "phizix-testu.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:369867054960:android:d1c6574f277dfcaf1879b5",
+        "android_client_info": {
+          "package_name": "com.dipesh.phizix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArg5GRenLfdSDVoVNg5tpojb9cQI0QcJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
