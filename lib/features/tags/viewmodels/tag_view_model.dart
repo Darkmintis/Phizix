@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/services/error_message_mapper.dart';
 import '../models/tag_model.dart';
 import '../repositories/tag_repository.dart';
 
@@ -23,12 +24,10 @@ class TagViewModel extends ChangeNotifier {
       _tags = await _repo.getTags();
       _error = '';
     } catch (e) {
-      _error = "Failed to load tags $e";
+      _error = mapErrorToMessage(e, fallback: 'Failed to load tags');
     }
 
     _isLoading = false;
     notifyListeners();
   }
-
-  Future<void> loadAuthors() => loadTags();
 }

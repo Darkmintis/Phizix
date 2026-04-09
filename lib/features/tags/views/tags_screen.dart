@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/constants/app_routes.dart';
 import 'package:phizix/core/di/service_locator.dart';
+import 'package:phizix/shared/viewmodels/filtered_articles_view_model.dart';
 import 'package:provider/provider.dart';
 import '../viewmodels/tag_view_model.dart';
 
@@ -37,47 +39,33 @@ class _Body extends StatelessWidget {
         itemBuilder: (context, index) {
           final tag = vm.tags[index];
 
-          return Container(
+          return Card(
             margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 14,
-              vertical: 12,
-            ),
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.grey.shade300,
-                width: 1.2,
+            child: ListTile(
+              onTap: () {
+                if ((tag.slug ?? '').isEmpty) {
+                  return;
+                }
+
+                Navigator.pushNamed(
+                  context,
+                  AppRoutes.filteredArticles,
+                  arguments: {
+                    AppRoutes.argTitle: tag.name ?? 'Tag',
+                    AppRoutes.argSlug: tag.slug!,
+                    AppRoutes.argFilterType: FilterType.tag,
+                  },
+                );
+              },
+              title: Text(
+                tag.name ?? '',
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  tag.name ?? '',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.blue.withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    '${tag.articleCount ?? 0}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                    ),
-                  ),
-                ),
-              ],
+              subtitle: Text('${tag.articleCount ?? 0} articles'),
+              trailing: const Icon(Icons.chevron_right),
             ),
           );
         },
