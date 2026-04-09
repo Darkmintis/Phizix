@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../shared/widgets/phizix_app_bar.dart';
@@ -6,6 +7,7 @@ import '../categories/views/categories_screen.dart';
 import '../tags/views/tags_screen.dart';
 import '../authors/views/author_screen.dart';
 import '../../core/providers/tab_index_provider.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 
 class MainScreen extends StatelessWidget{
   const MainScreen({super.key});
@@ -36,6 +38,15 @@ class MainScreenContent extends StatelessWidget{
   return Scaffold(  
     appBar: const PhizixAppBar(),
     body: screens[tabProvider.currentIndex],
+    floatingActionButton: kDebugMode
+        ? FloatingActionButton(
+            backgroundColor: Colors.red,
+            onPressed: () {
+              FirebaseCrashlytics.instance.crash();
+            },
+            child: const Icon(Icons.bug_report),
+          )
+        : null,
     bottomNavigationBar: BottomNavigationBar(
       currentIndex: tabProvider.currentIndex,
       onTap: tabProvider.setIndex,
