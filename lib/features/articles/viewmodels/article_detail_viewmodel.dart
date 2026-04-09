@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/services/error_message_mapper.dart';
 import '../models/article_detail_model.dart';
 import '../repositories/article_repository.dart';
 
@@ -24,18 +25,12 @@ class ArticleDetailViewModel extends ChangeNotifier {
     try {
       _article = await repository.getArticleBySlug(slug);
       _state = DetailState.success;
+      _error = '';
     } catch (e) {
       _state = DetailState.error;
-      _error = _mapError(e);
+      _error = mapErrorToMessage(e);
     }
 
     notifyListeners();
-  }
-
-  String _mapError(Object e) {
-    if (e is Exception) {
-      return e.toString().replaceFirst('Exception: ', '');
-    }
-    return 'Something went wrong';
   }
 }

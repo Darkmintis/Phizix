@@ -1,6 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:phizix/core/services/api_exception.dart';
+import 'package:phizix/core/services/error_message_mapper.dart';
 import '../repositories/article_repository.dart';
 import '../models/article_model.dart';
 
@@ -31,15 +30,11 @@ class ArticlesViewModel extends ChangeNotifier {
       _errorMessage = '';
     } catch (e) {
       _state = ViewState.error;
-      
-      if (e is DioException && e.error is ApiException){
-        _errorMessage = (e.error as ApiException).message;
-      } else {
-        _errorMessage = "Something went wrong";
-      }
+      _errorMessage = mapErrorToMessage(e);
     }
-      notifyListeners();
-    }
+
+    notifyListeners();
+  }
 
   Future<void> refreshArticles() => loadArticles();
   
