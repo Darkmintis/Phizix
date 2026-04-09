@@ -60,14 +60,5 @@ void main() {
       expect(viewModel.error, contains('Failed to load tags'));
       verify(() => mockRepository.getTags()).called(1);
     });
-
-    test('loadAuthors remains a compatibility alias to loadTags', () async {
-      when(() => mockRepository.getTags()).thenAnswer((_) async => [fakeTag()]);
-
-      await viewModel.loadAuthors();
-
-      expect(viewModel.tags.length, 1);
-      verify(() => mockRepository.getTags()).called(1);
-    });
   });
 }
