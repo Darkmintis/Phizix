@@ -41,7 +41,7 @@ void main(){
     });
 
     test('isLoading is false initially', (){
-      expect(viewModel.isLoading, '');
+      expect(viewModel.isLoading, false);
     });
   });
 
@@ -89,7 +89,7 @@ void main(){
       expect(viewModel.errorMessage, 'Something went wrong');
     });
 
-    test('shows ApiException message on DioExceptino with ApiException', () async{
+    test('shows ApiException message on DioException with ApiException', () async{
       final apiException = ApiException(message: 'Article not found', statusCode: 404);
       final dioException = DioException(
         requestOptions: RequestOptions(path: '/article'),
@@ -115,7 +115,7 @@ void main(){
     });
   });
 
-  group('refereshArticles', (){
+  group('refreshArticles', (){
     test('behaves same as loadArticles on success', () async {
       when(() => mockRepository.getArticles(page: 1))
       .thenAnswer((_) async => [fakeArticle()]);
