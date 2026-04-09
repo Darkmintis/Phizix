@@ -21,6 +21,12 @@ abstract class ArticleApi {
     @Query("page") int page,
   );
 
+  @GET('/article')
+  Future<ArticleResponse> getArticlesByTag(
+    @Query("tag") String tagSlug,
+    @Query("page") int page,
+  );
+
   @GET('/article/{slug}')
   Future<ArticleDetailModel> getArticleBySlug(@Path("slug") String slug);
 
