@@ -15,7 +15,7 @@ class TagViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get error => _error;
 
-  Future<void> loadAuthors() async {
+  Future<void> loadTags() async {
     _isLoading = true;
     notifyListeners();
 
@@ -29,4 +29,6 @@ class TagViewModel extends ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  Future<void> loadAuthors() => loadTags();
 }
