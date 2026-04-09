@@ -23,34 +23,54 @@ class _Body extends StatelessWidget {
     final vm = context.watch<AuthorsViewModel>();
 
     if (vm.isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (vm.error.isNotEmpty) {
-      return Scaffold(
-        body: Center(child: Text(vm.error)),
-      );
+      return Center(child: Text(vm.error));
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text("Authors")),
-      body: ListView.builder(
-        itemCount: vm.authors.length,
-        itemBuilder: (context, index) {
-          final author = vm.authors[0];
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      itemCount: vm.authors.length,
+      itemBuilder: (context, index) {
+        final author = vm.authors[index];
 
-          return ListTile(
-            leading: CircleAvatar(
-              backgroundImage: NetworkImage(author.image),
-            ),
-            title: Text(author.name),
-            subtitle: Text("${author.articleCount} articles"),
-            
-          );
-        },
-      ),
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 24,
+                backgroundImage: NetworkImage(author.image),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      author.name,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      "${author.articleCount} articles",
+                      style: TextStyle(color: Colors.grey.shade700),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(author.description),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
