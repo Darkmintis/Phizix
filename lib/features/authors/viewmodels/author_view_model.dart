@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/services/error_message_mapper.dart';
 import '../models/author_model.dart';
 import '../repositories/author_repository.dart';
 
@@ -23,7 +24,7 @@ class AuthorsViewModel extends ChangeNotifier {
       _authors = await _repo.getAuthors();
       _error = '';
     } catch (e) {
-      _error = "Failed to load authors $e";
+      _error = mapErrorToMessage(e, fallback: 'Failed to load authors');
     }
 
     _isLoading = false;
