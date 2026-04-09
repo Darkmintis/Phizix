@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/services/error_message_mapper.dart';
 import '../models/category_model.dart';
 import '../repositories/category_repository.dart';
 
@@ -23,7 +24,7 @@ class CategoryViewModel extends ChangeNotifier {
       _categories = await _repo.getCategories();
       _error = '';
     } catch (e) {
-      _error = "Failed to load categories $e";
+      _error = mapErrorToMessage(e, fallback: 'Failed to load categories');
     }
 
     _isLoading = false;

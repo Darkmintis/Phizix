@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/constants/app_routes.dart';
 import 'package:phizix/core/di/service_locator.dart';
 import 'package:phizix/features/categories/viewmodels/category_view_model.dart';
-import 'package:phizix/features/categories/views/category_articles_screen.dart';
+import 'package:phizix/shared/viewmodels/filtered_articles_view_model.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -46,14 +47,14 @@ class _Body extends StatelessWidget {
                 return;
               }
 
-              Navigator.push(
+              Navigator.pushNamed(
                 context,
-                MaterialPageRoute(
-                  builder: (_) => CategoryArticlesScreen(
-                    categoryName: category.name ?? 'Category',
-                    categorySlug: category.slug!,
-                  ),
-                ),
+                AppRoutes.filteredArticles,
+                arguments: {
+                  AppRoutes.argTitle: category.name ?? 'Category',
+                  AppRoutes.argSlug: category.slug!,
+                  AppRoutes.argFilterType: FilterType.category,
+                },
               );
             },
             leading: CircleAvatar(
