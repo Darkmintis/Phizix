@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:phizix/features/articles/widgets/article_card.dart';
 import 'package:phizix/main.dart' as app;
+import 'package:phizix/shared/widgets/article_card.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
