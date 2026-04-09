@@ -7,6 +7,8 @@ abstract class ArticleRepository {
 
   Future<List<Article>> getArticlesByCategory(String categorySlug, {int page});
 
+  Future<List<Article>> getArticlesByTag(String tagSlug, {int page});
+
   Future<ArticlePagination> getArticlesWithPagination({int page});
 
   Future<ArticleDetailModel> getArticleBySlug(String slug);
