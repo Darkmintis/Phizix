@@ -8,7 +8,6 @@ import 'package:phizix/features/articles/repositories/article_repository_impl.da
 
 class MockArticleApi extends Mock implements ArticleApi {}
 
-// helper — reuse in every test
 Article fakeArticle() => Article(
       title: 'Test Article',
       slug: 'test-article',
@@ -27,24 +26,20 @@ void main() {
     repository = ArticleRepositoryImpl(mockApi);
   });
 
-  // ── getArticles() ────────────────────────────────
   group('getArticles', () {
-
     test('returns list of articles on success', () async {
-      // Arrange
       when(() => mockApi.getArticles(1))
           .thenAnswer((_) async => ArticleResponse(
                 results: [fakeArticle()],
                 pagination: {},
               ));
 
-      // Act
       final result = await repository.getArticles();
 
-      // Assert
       expect(result, isA<List<Article>>());
       expect(result.length, 1);
       expect(result.first.title, 'Test Article');
+      verify(() => mockApi.getArticles(1)).called(1);
     });
 
     test('returns empty list when api returns no articles', () async {
@@ -57,6 +52,7 @@ void main() {
       final result = await repository.getArticles();
 
       expect(result, isEmpty);
+      verify(() => mockApi.getArticles(1)).called(1);
     });
 
     test('throws exception when API fails', () async {
@@ -64,13 +60,60 @@ void main() {
           .thenThrow(Exception('Network error'));
 
       expect(() => repository.getArticles(), throwsException);
+      verify(() => mockApi.getArticles(1)).called(1);
     });
-
   });
 
-  // ── getArticlesWithPagination() ──────────────────
-  group('getArticlesWithPagination', () {
+  group('getArticlesByCategory', () {
+    test('returns category filtered articles', () async {
+      when(() => mockApi.getArticlesByCategory('astrophysics', 1))
+          .thenAnswer((_) async => ArticleResponse(
+                results: [fakeArticle()],
+                pagination: {},
+              ));
 
+      final result = await repository.getArticlesByCategory('astrophysics');
+
+      expect(result.length, 1);
+      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+    });
+
+    test('throws when category request fails', () async {
+      when(() => mockApi.getArticlesByCategory('astrophysics', 1))
+          .thenThrow(Exception('Network error'));
+
+      expect(
+        () => repository.getArticlesByCategory('astrophysics'),
+        throwsException,
+      );
+      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+    });
+  });
+
+  group('getArticlesByTag', () {
+    test('returns tag filtered articles', () async {
+      when(() => mockApi.getArticlesByTag('nanomaterials', 1))
+          .thenAnswer((_) async => ArticleResponse(
+                results: [fakeArticle()],
+                pagination: {},
+              ));
+
+      final result = await repository.getArticlesByTag('nanomaterials');
+
+      expect(result.length, 1);
+      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
+    });
+
+    test('throws when tag request fails', () async {
+      when(() => mockApi.getArticlesByTag('nanomaterials', 1))
+          .thenThrow(Exception('Network error'));
+
+      expect(() => repository.getArticlesByTag('nanomaterials'), throwsException);
+      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
+    });
+  });
+
+  group('getArticlesWithPagination', () {
     test('returns correct pagination map', () async {
       when(() => mockApi.getArticles(1))
           .thenAnswer((_) async => ArticleResponse(
@@ -83,6 +126,7 @@ void main() {
       expect(result.articles, isA<List<Article>>());
       expect(result.currentPage, 2);
       expect(result.totalItems, 20);
+      verify(() => mockApi.getArticles(1)).called(1);
     });
 
     test('returns default values when pagination keys are missing', () async {
@@ -96,7 +140,7 @@ void main() {
 
       expect(result.currentPage, 1);
       expect(result.totalItems, 0);
+      verify(() => mockApi.getArticles(1)).called(1);
     });
-
   });
 }
