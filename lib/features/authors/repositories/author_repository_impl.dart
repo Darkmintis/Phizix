@@ -1,5 +1,6 @@
 import 'author_repository.dart';
 import '../../../core/api/article_api.dart';
+import '../../../core/services/api_exception.dart';
 import '../models/author_model.dart';
 
 class AuthorRepositoryImpl implements AuthorRepository {
@@ -8,11 +9,11 @@ class AuthorRepositoryImpl implements AuthorRepository {
   AuthorRepositoryImpl(this.api);
 
   @override
-  Future<List<Author>> getAuthors() {
+  Future<List<Author>> getAuthors() async {
     try {
-      return api.getAuthors();
-  }catch (e){
-    throw 'Error $e ';
+      return await api.getAuthors();
+    } catch (e) {
+      throw ApiException(message: 'Failed to fetch authors: $e');
+    }
   }
-}
 }
