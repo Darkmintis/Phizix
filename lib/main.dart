@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:phizix/core/constants/app_routes.dart';
+import 'package:phizix/core/navigation/app_router.dart';
 import 'package:phizix/core/providers/theme_provider.dart';
 import 'package:provider/provider.dart';
-import 'features/main/main_screen.dart';
 import 'core/di/service_locator.dart';
 
 void main() {
@@ -23,7 +24,8 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.lightTheme,
       darkTheme: themeProvider.darkTheme,
       themeMode: themeProvider.themeMode,
-      home: const MainScreen(),
+      initialRoute: AppRoutes.home,
+      onGenerateRoute: AppRouter.onGenerateRoute,
       debugShowCheckedModeBanner: false,
     );
         },
