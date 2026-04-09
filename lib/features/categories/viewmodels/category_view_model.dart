@@ -15,7 +15,7 @@ class CategoryViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String get error => _error;
 
-  Future<void> loadAuthors() async {
+  Future<void> loadCategories() async {
     _isLoading = true;
     notifyListeners();
 

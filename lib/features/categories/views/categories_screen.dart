@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/di/service_locator.dart';
 import 'package:phizix/features/categories/viewmodels/category_view_model.dart';
+import 'package:phizix/features/categories/views/category_articles_screen.dart';
 import 'package:provider/provider.dart';
 
 class CategoriesScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => getIt<CategoryViewModel>()..loadAuthors(),
+      create: (_) => getIt<CategoryViewModel>()..loadCategories(),
       child: const _Body(),
     );
   }
@@ -23,35 +24,50 @@ class _Body extends StatelessWidget {
     final vm = context.watch<CategoryViewModel>();
 
     if (vm.isLoading) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
 
     if (vm.error.isNotEmpty) {
-      return Scaffold(
-        body: Center(child: Text(vm.error)),
-      );
+      return Center(child: Text(vm.error));
     }
 
-    return Scaffold(
-      appBar: AppBar(title: const Text("Categories")),
-      body: ListView.builder(
-        itemCount: vm.categories.length,
-        itemBuilder: (context, index) {
-          final category = vm.categories[index];
+    return ListView.builder(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      itemCount: vm.categories.length,
+      itemBuilder: (context, index) {
+        final category = vm.categories[index];
+        final imageUrl = category.image ?? '';
 
-          return ListTile(
+        return Card(
+          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: ListTile(
+            onTap: () {
+              if ((category.slug ?? '').isEmpty) {
+                return;
+              }
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => CategoryArticlesScreen(
+                    categoryName: category.name ?? 'Category',
+                    categorySlug: category.slug!,
+                  ),
+                ),
+              );
+            },
             leading: CircleAvatar(
-              
-              backgroundImage: category.image == null ? NetworkImage('https://imgs.search.brave.com/AFQDS58XTLxZRmWDU93yJeuZRE5X6v3P7HrJ7axRXN4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly93YWxs/cGFwZXJzLmNvbS9p/bWFnZXMvaGQvcGxh/aW4tZ3JleS1iYWNr/Z3JvdW5kLTJiZmV4/NXlyeWN1NHdmbXgu/anBn') :NetworkImage(category.image!),
+              backgroundImage: imageUrl.isNotEmpty
+                  ? NetworkImage(imageUrl)
+                  : null,
+              child: imageUrl.isEmpty ? const Icon(Icons.category) : null,
             ),
-            title: Text(category.name!),
-            subtitle: Text("${category.articleCount} articles"),
-            
-          );
-        },
-      ),
+            title: Text(category.name ?? 'Unknown Category'),
+            subtitle: Text('${category.articleCount ?? 0} articles'),
+            trailing: const Icon(Icons.chevron_right),
+          ),
+        );
+      },
     );
   }
 }

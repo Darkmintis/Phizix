@@ -5,6 +5,8 @@ import '../models/article_pagination.dart';
 abstract class ArticleRepository {
   Future<List<Article>> getArticles({int page});
 
+  Future<List<Article>> getArticlesByCategory(String categorySlug, {int page});
+
   Future<ArticlePagination> getArticlesWithPagination({int page});
 
   Future<ArticleDetailModel> getArticleBySlug(String slug);

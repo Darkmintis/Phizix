@@ -16,6 +16,15 @@ class ArticleRepositoryImpl implements ArticleRepository{
   }
 
   @override
+  Future<List<Article>> getArticlesByCategory(
+    String categorySlug, {
+    int page = 1,
+  }) async {
+    final response = await _api.getArticlesByCategory(categorySlug, page);
+    return response.results;
+  }
+
+  @override
   Future<ArticlePagination> getArticlesWithPagination({int page = 1}) async {
   final response = await _api.getArticles(page);
 
