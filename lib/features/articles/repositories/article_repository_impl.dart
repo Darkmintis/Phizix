@@ -25,6 +25,15 @@ class ArticleRepositoryImpl implements ArticleRepository{
   }
 
   @override
+  Future<List<Article>> getArticlesByTag(
+    String tagSlug, {
+    int page = 1,
+  }) async {
+    final response = await _api.getArticlesByTag(tagSlug, page);
+    return response.results;
+  }
+
+  @override
   Future<ArticlePagination> getArticlesWithPagination({int page = 1}) async {
   final response = await _api.getArticles(page);
 
