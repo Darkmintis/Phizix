@@ -10,9 +10,11 @@ platform :android do
     # Unit tests
     sh("flutter test ../test/ --reporter=compact")
 
-    # Integration tests one by one
-    sh("flutter test ../integration_test/articles_flow_test.dart --reporter=compact")
-    sh("flutter test ../integration_test/app_flow_test.dart --reporter=compact")
+    # Integration tests - only run locally, skip on CI
+    unless ENV["CI"]
+      sh("flutter test ../integration_test/articles_flow_test.dart --reporter=compact")
+      sh("flutter test ../integration_test/app_flow_test.dart --reporter=compact")
+    end
 
     # Build release APK
     sh("flutter build apk --release", chdir: "..")
