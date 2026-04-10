@@ -8,14 +8,14 @@ platform :android do
   lane :test_and_distribute do
 
     # Unit tests
-    sh("cd .. && flutter test test/ --reporter=compact")
+    sh("flutter test ../test/ --reporter=compact")
 
     # Integration tests one by one
-    sh("cd .. && flutter test integration_test/articles_flow_test.dart --reporter=compact")
-    sh("cd .. && flutter test integration_test/app_flow_test.dart --reporter=compact")
+    sh("flutter test ../integration_test/articles_flow_test.dart --reporter=compact")
+    sh("flutter test ../integration_test/app_flow_test.dart --reporter=compact")
 
     # Build release APK
-    sh("cd .. && flutter build apk --release")
+    sh("flutter build apk --release", chdir: "..")
 
     # Distribute to Firebase App Distribution
     firebase_app_distribution(
