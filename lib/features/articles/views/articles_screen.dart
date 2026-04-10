@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:phizix/shared/widgets/article_card.dart';
 import '../viewmodels/articles_view_model.dart';
 import '../../../core/di/service_locator.dart';
+import '../../../core/enums/view_state.dart';
 
 class ArticlesScreen extends StatelessWidget {
   const ArticlesScreen({super.key});

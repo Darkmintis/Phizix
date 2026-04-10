@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../../../core/di/service_locator.dart';
 import '../viewmodels/article_detail_viewmodel.dart';
+import '../../../core/enums/view_state.dart';
 
 class ArticleDetailsScreen extends StatelessWidget {
   final String slug;
@@ -26,19 +27,19 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<ArticleDetailViewModel>();
 
-    if (vm.state == DetailState.loading) {
+    if (vm.state == ViewState.loading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
       );
     }
 
-    if (vm.state == DetailState.error) {
+    if (vm.state == ViewState.error) {
       return Scaffold(
         body: Center(child: Text(vm.error)),
       );
     }
 
-    if (vm.state == DetailState.success) {
+    if (vm.state == ViewState.success) {
       final article = vm.article!;
 
       return Scaffold(

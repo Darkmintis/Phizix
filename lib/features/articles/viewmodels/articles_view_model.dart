@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:phizix/core/services/error_message_mapper.dart';
 import '../repositories/article_repository.dart';
 import '../models/article_model.dart';
-
-enum ViewState { idle, loading, success, error }
+import '../../../core/enums/view_state.dart';
 
 class ArticlesViewModel extends ChangeNotifier {
   final ArticleRepository _repository;
