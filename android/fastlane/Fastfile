@@ -8,12 +8,12 @@ platform :android do
   lane :test_and_distribute do
 
     # Unit tests
-    sh("flutter test ../test/ --reporter=compact")
+    sh("flutter test ../../test/ --reporter=compact")
 
     # Integration tests - only run locally, skip on CI
     unless ENV["CI"]
-      sh("flutter test ../integration_test/articles_flow_test.dart --reporter=compact")
-      sh("flutter test ../integration_test/app_flow_test.dart --reporter=compact")
+      sh("flutter test ../../integration_test/articles_flow_test.dart --reporter=compact")
+      sh("flutter test ../../integration_test/app_flow_test.dart --reporter=compact")
     end
 
     # Build release APK
@@ -24,7 +24,7 @@ platform :android do
       app: ENV["FIREBASE_APP_ID"],
       firebase_cli_token: ENV["FIREBASE_TOKEN"],
       android_artifact_type: "APK",
-      android_artifact_path: "../build/app/outputs/flutter-apk/app-release.apk",
+      android_artifact_path: "../../build/app/outputs/flutter-apk/app-release.apk",
       groups: "testers",
       release_notes_file: "fastlane/release_notes.txt"
     )
