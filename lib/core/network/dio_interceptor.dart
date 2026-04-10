@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:phizix/shared/models/error_model.dart';
 import '../services/api_exception.dart';
 
 class AppInterceptor extends Interceptor{
@@ -28,6 +29,18 @@ class AppInterceptor extends Interceptor{
       }
 
       ApiException _mapError(DioException error){
+        try {
+          if (error.response?.data != null){
+            final errorModel = ErrorModel.fromJson(error.response?.data);
+            if (errorModel.message != null){
+              return ApiException(
+                message: errorModel.message!,
+                statusCode: errorModel.statusCode,
+                type: errorModel.message,
+              );
+            }
+          }
+        } catch (_) {}
         final statusCode = error.response?.statusCode;
 
         if (statusCode != null) {
@@ -95,3 +108,4 @@ class AppInterceptor extends Interceptor{
     }
   }
 }
+
