@@ -4,6 +4,7 @@ import 'package:phizix/features/articles/repositories/article_repository.dart';
 import 'package:phizix/shared/viewmodels/filtered_articles_view_model.dart';
 import 'package:phizix/shared/widgets/article_card.dart';
 import 'package:provider/provider.dart';
+import '../../core/enums/view_state.dart';
 
 class FilteredArticlesScreen extends StatelessWidget {
   final String title;
@@ -40,16 +41,16 @@ class _Body extends StatelessWidget {
     final vm = context.watch<FilteredArticlesViewModel>();
 
     switch (vm.state) {
-      case FilteredArticlesState.loading:
+      case ViewState.loading:
         return const Scaffold(
           body: Center(child: CircularProgressIndicator()),
         );
-      case FilteredArticlesState.error:
+      case ViewState.error:
         return Scaffold(
           appBar: AppBar(title: Text(title)),
           body: Center(child: Text(vm.errorMessage)),
         );
-      case FilteredArticlesState.success:
+      case ViewState.success:
         if (vm.articles.isEmpty) {
           return Scaffold(
             appBar: AppBar(title: Text(title)),
@@ -67,7 +68,7 @@ class _Body extends StatelessWidget {
             },
           ),
         );
-      case FilteredArticlesState.idle:
+      case ViewState.idle:
         return const SizedBox.shrink();
     }
   }
