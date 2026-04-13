@@ -1,5 +1,3 @@
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
@@ -16,8 +14,15 @@ platform :android do
       sh("flutter test ../../integration_test/app_flow_test.dart --reporter=compact")
     end
 
-    # Build release APK
-    sh("flutter build apk --release", chdir: "..")
+    # Build release APK with CI-provided version metadata when available.
+    build_name = ENV["BUILD_NAME"]
+    build_number = ENV["BUILD_NUMBER"] || ENV["GITHUB_RUN_NUMBER"]
+
+    build_command = "flutter build apk --release"
+    build_command += " --build-name=#{build_name}" if build_name && !build_name.empty?
+    build_command += " --build-number=#{build_number}" if build_number && !build_number.empty?
+
+    sh(build_command, chdir: "..")
 
     # Distribute to Firebase App Distribution
     firebase_app_distribution(
@@ -26,7 +31,6 @@ platform :android do
       android_artifact_type: "APK",
       android_artifact_path: "../build/app/outputs/flutter-apk/app-release.apk",
       groups: "testers",
-      release_notes: "Release #{ENV["GITHUB_REF_NAME"]}"
     )
 
   end
