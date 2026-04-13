@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:phizix/core/services/error_message_mapper.dart';
 import 'package:phizix/features/articles/models/article_model.dart';
 import 'package:phizix/features/articles/repositories/article_repository.dart';
+import '../../core/enums/view_state.dart';
 
 enum FilterType { category, tag }
-
-enum FilteredArticlesState { idle, loading, success, error }
 
 class FilteredArticlesViewModel extends ChangeNotifier {
   final ArticleRepository _repository;
@@ -18,16 +17,16 @@ class FilteredArticlesViewModel extends ChangeNotifier {
     this.slug,
   );
 
-  FilteredArticlesState _state = FilteredArticlesState.idle;
+  ViewState _state = ViewState.idle;
   List<Article> _articles = [];
   String _errorMessage = '';
 
-  FilteredArticlesState get state => _state;
+  ViewState get state => _state;
   List<Article> get articles => _articles;
   String get errorMessage => _errorMessage;
 
   Future<void> loadArticles() async {
-    _state = FilteredArticlesState.loading;
+    _state = ViewState.loading;
     notifyListeners();
 
     try {
@@ -38,9 +37,9 @@ class FilteredArticlesViewModel extends ChangeNotifier {
       };
 
       _errorMessage = '';
-      _state = FilteredArticlesState.success;
+      _state = ViewState.success;
     } catch (e) {
-      _state = FilteredArticlesState.error;
+      _state = ViewState.error;
       _errorMessage = mapErrorToMessage(
         e,
         fallback: 'Failed to load articles',
