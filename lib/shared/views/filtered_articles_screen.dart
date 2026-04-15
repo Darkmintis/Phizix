@@ -36,40 +36,50 @@ class _Body extends StatelessWidget {
 
   const _Body({required this.title});
 
+  static const int _prefetchThreshold = 3;
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<FilteredArticlesViewModel>();
 
+    Widget body;
+
     switch (vm.state) {
       case ViewState.loading:
-        return const Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        );
+        body = const Center(child: CircularProgressIndicator());
+        break;
       case ViewState.error:
-        return Scaffold(
-          appBar: AppBar(title: Text(title)),
-          body: Center(child: Text(vm.errorMessage)),
-        );
+        body = Center(child: Text(vm.errorMessage));
+        break;
       case ViewState.success:
         if (vm.articles.isEmpty) {
-          return Scaffold(
-            appBar: AppBar(title: Text(title)),
-            body: const Center(child: Text('No articles found')),
-          );
+          body = const Center(child: Text('No articles found'));
+          break;
         }
 
-        return Scaffold(
-          appBar: AppBar(title: Text(title)),
-          body: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: vm.articles.length,
-            itemBuilder: (context, index) {
-              return ArticleCard(article: vm.articles[index]);
-            },
-          ),
+        body = ListView.builder(
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          itemCount: vm.articles.length,
+          itemBuilder: (context, index) {
+            final shouldPrefetch =
+                vm.hasMore && index >= vm.articles.length - _prefetchThreshold;
+
+            if (shouldPrefetch) {
+              vm.loadMoreArticles();
+            }
+
+            return ArticleCard(article: vm.articles[index]);
+          },
         );
+        break;
       case ViewState.idle:
-        return const SizedBox.shrink();
+        body = const SizedBox.shrink();
+        break;
     }
+
+    return Scaffold(
+      appBar: AppBar(title: Text(title)),
+      body: body,
+    );
   }
 }

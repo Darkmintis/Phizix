@@ -9,13 +9,13 @@ import 'package:phizix/features/articles/repositories/article_repository_impl.da
 class MockArticleApi extends Mock implements ArticleApi {}
 
 Article fakeArticle() => Article(
-      title: 'Test Article',
-      slug: 'test-article',
-      excerpt: 'Test excerpt',
-      content: 'Test content',
-      featureImage: 'https://image.com/test.jpg',
-      publishedAt: DateTime(2024, 1, 1),
-    );
+  title: 'Test Article',
+  slug: 'test-article',
+  excerpt: 'Test excerpt',
+  content: 'Test content',
+  featureImage: 'https://image.com/test.jpg',
+  publishedAt: DateTime(2024, 1, 1),
+);
 
 void main() {
   late MockArticleApi mockApi;
@@ -28,11 +28,9 @@ void main() {
 
   group('getArticles', () {
     test('returns list of articles on success', () async {
-      when(() => mockApi.getArticles(1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [fakeArticle()],
-                pagination: {},
-              ));
+      when(() => mockApi.getArticles(1)).thenAnswer(
+        (_) async => ArticleResponse(results: [fakeArticle()], pagination: {}),
+      );
 
       final result = await repository.getArticles();
 
@@ -43,11 +41,9 @@ void main() {
     });
 
     test('returns empty list when api returns no articles', () async {
-      when(() => mockApi.getArticles(1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [],
-                pagination: {},
-              ));
+      when(
+        () => mockApi.getArticles(1),
+      ).thenAnswer((_) async => ArticleResponse(results: [], pagination: {}));
 
       final result = await repository.getArticles();
 
@@ -56,8 +52,7 @@ void main() {
     });
 
     test('throws exception when API fails', () async {
-      when(() => mockApi.getArticles(1))
-          .thenThrow(Exception('Network error'));
+      when(() => mockApi.getArticles(1)).thenThrow(Exception('Network error'));
 
       expect(() => repository.getArticles(), throwsException);
       verify(() => mockApi.getArticles(1)).called(1);
@@ -66,11 +61,9 @@ void main() {
 
   group('getArticlesByCategory', () {
     test('returns category filtered articles', () async {
-      when(() => mockApi.getArticlesByCategory('astrophysics', 1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [fakeArticle()],
-                pagination: {},
-              ));
+      when(() => mockApi.getArticlesByCategory('astrophysics', 1)).thenAnswer(
+        (_) async => ArticleResponse(results: [fakeArticle()], pagination: {}),
+      );
 
       final result = await repository.getArticlesByCategory('astrophysics');
 
@@ -79,8 +72,9 @@ void main() {
     });
 
     test('throws when category request fails', () async {
-      when(() => mockApi.getArticlesByCategory('astrophysics', 1))
-          .thenThrow(Exception('Network error'));
+      when(
+        () => mockApi.getArticlesByCategory('astrophysics', 1),
+      ).thenThrow(Exception('Network error'));
 
       expect(
         () => repository.getArticlesByCategory('astrophysics'),
@@ -92,11 +86,9 @@ void main() {
 
   group('getArticlesByTag', () {
     test('returns tag filtered articles', () async {
-      when(() => mockApi.getArticlesByTag('nanomaterials', 1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [fakeArticle()],
-                pagination: {},
-              ));
+      when(() => mockApi.getArticlesByTag('nanomaterials', 1)).thenAnswer(
+        (_) async => ArticleResponse(results: [fakeArticle()], pagination: {}),
+      );
 
       final result = await repository.getArticlesByTag('nanomaterials');
 
@@ -105,21 +97,26 @@ void main() {
     });
 
     test('throws when tag request fails', () async {
-      when(() => mockApi.getArticlesByTag('nanomaterials', 1))
-          .thenThrow(Exception('Network error'));
+      when(
+        () => mockApi.getArticlesByTag('nanomaterials', 1),
+      ).thenThrow(Exception('Network error'));
 
-      expect(() => repository.getArticlesByTag('nanomaterials'), throwsException);
+      expect(
+        () => repository.getArticlesByTag('nanomaterials'),
+        throwsException,
+      );
       verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
     });
   });
 
   group('getArticlesWithPagination', () {
     test('returns correct pagination map', () async {
-      when(() => mockApi.getArticles(1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [fakeArticle()],
-                pagination: {'page': 2, 'count': 20},
-              ));
+      when(() => mockApi.getArticles(1)).thenAnswer(
+        (_) async => ArticleResponse(
+          results: [fakeArticle()],
+          pagination: {'page': 2, 'count': 20},
+        ),
+      );
 
       final result = await repository.getArticlesWithPagination();
 
@@ -130,17 +127,73 @@ void main() {
     });
 
     test('returns default values when pagination keys are missing', () async {
-      when(() => mockApi.getArticles(1))
-          .thenAnswer((_) async => ArticleResponse(
-                results: [],
-                pagination: {},
-              ));
+      when(
+        () => mockApi.getArticles(1),
+      ).thenAnswer((_) async => ArticleResponse(results: [], pagination: {}));
 
       final result = await repository.getArticlesWithPagination();
 
       expect(result.currentPage, 1);
       expect(result.totalItems, 0);
       verify(() => mockApi.getArticles(1)).called(1);
+    });
+
+    test('maps total pages from pages key returned by live api', () async {
+      when(() => mockApi.getArticles(1)).thenAnswer(
+        (_) async => ArticleResponse(
+          results: [fakeArticle()],
+          pagination: {'page': 1, 'size': 20, 'count': 178, 'pages': 9},
+        ),
+      );
+
+      final result = await repository.getArticlesWithPagination();
+
+      expect(result.currentPage, 1);
+      expect(result.totalPages, 9);
+      expect(result.totalItems, 178);
+      verify(() => mockApi.getArticles(1)).called(1);
+    });
+  });
+
+  group('getArticlesByCategoryWithPagination', () {
+    test('returns paginated category filtered articles', () async {
+      when(() => mockApi.getArticlesByCategory('astrophysics', 1)).thenAnswer(
+        (_) async => ArticleResponse(
+          results: [fakeArticle()],
+          pagination: {'page': 1, 'total_pages': 3, 'count': 12},
+        ),
+      );
+
+      final result = await repository.getArticlesByCategoryWithPagination(
+        'astrophysics',
+      );
+
+      expect(result.articles.length, 1);
+      expect(result.currentPage, 1);
+      expect(result.totalPages, 3);
+      expect(result.totalItems, 12);
+      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+    });
+  });
+
+  group('getArticlesByTagWithPagination', () {
+    test('returns paginated tag filtered articles', () async {
+      when(() => mockApi.getArticlesByTag('nanomaterials', 1)).thenAnswer(
+        (_) async => ArticleResponse(
+          results: [fakeArticle()],
+          pagination: {'page': 2, 'total_pages': 4, 'count': 24},
+        ),
+      );
+
+      final result = await repository.getArticlesByTagWithPagination(
+        'nanomaterials',
+      );
+
+      expect(result.articles.length, 1);
+      expect(result.currentPage, 2);
+      expect(result.totalPages, 4);
+      expect(result.totalItems, 24);
+      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
     });
   });
 }

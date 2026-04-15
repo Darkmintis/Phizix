@@ -4,15 +4,21 @@ import '../../../core/api/article_api.dart';
 import '../models/article_model.dart';
 import 'article_repository.dart';
 
-class ArticleRepositoryImpl implements ArticleRepository{
+class ArticleRepositoryImpl implements ArticleRepository {
   final ArticleApi _api;
 
   ArticleRepositoryImpl(this._api);
 
   @override
-  Future<List<Article>> getArticles({int page = 1}) async{
+  Future<List<Article>> getArticles({int page = 1}) async {
     final response = await _api.getArticles(page);
     return response.results;
+  }
+
+  @override
+  Future<ArticlePagination> getArticlesWithPagination({int page = 1}) async {
+    final response = await _api.getArticles(page);
+    return _mapPaginationResponse(response.results, response.pagination);
   }
 
   @override
@@ -25,31 +31,52 @@ class ArticleRepositoryImpl implements ArticleRepository{
   }
 
   @override
-  Future<List<Article>> getArticlesByTag(
-    String tagSlug, {
+  Future<ArticlePagination> getArticlesByCategoryWithPagination(
+    String categorySlug, {
     int page = 1,
   }) async {
+    final response = await _api.getArticlesByCategory(categorySlug, page);
+    return _mapPaginationResponse(response.results, response.pagination);
+  }
+
+  @override
+  Future<List<Article>> getArticlesByTag(String tagSlug, {int page = 1}) async {
     final response = await _api.getArticlesByTag(tagSlug, page);
     return response.results;
   }
 
   @override
-  Future<ArticlePagination> getArticlesWithPagination({int page = 1}) async {
-  final response = await _api.getArticles(page);
-
-  return ArticlePagination(
-    articles : response.results,
-    currentPage: response.pagination['page'] ?? 1,
-    totalPages: response.pagination['total_pages'] ?? 1,
-    totalItems: response.pagination['count'] ?? 0,
-  );
+  Future<ArticlePagination> getArticlesByTagWithPagination(
+    String tagSlug, {
+    int page = 1,
+  }) async {
+    final response = await _api.getArticlesByTag(tagSlug, page);
+    return _mapPaginationResponse(response.results, response.pagination);
   }
 
-  @override  
-  Future<ArticleDetailModel> getArticleBySlug(String slug) async{
-    final response = await _api.getArticleBySlug(slug);    
+  ArticlePagination _mapPaginationResponse(
+    List<Article> articles,
+    Map<String, dynamic> pagination,
+  ) {
+    final page = pagination['page'] ?? 1;
+    final size = pagination['size'] ?? 20;
+    final count = pagination['count'] ?? 0;
+    final totalPages =
+        pagination['total_pages'] ??
+        pagination['pages'] ??
+        (size > 0 ? ((count + size - 1) ~/ size) : 1);
+
+    return ArticlePagination(
+      articles: articles,
+      currentPage: page,
+      totalPages: totalPages,
+      totalItems: count,
+    );
+  }
+
+  @override
+  Future<ArticleDetailModel> getArticleBySlug(String slug) async {
+    final response = await _api.getArticleBySlug(slug);
     return response;
   }
-
-
 }

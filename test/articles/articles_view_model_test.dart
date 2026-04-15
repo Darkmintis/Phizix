@@ -3,13 +3,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phizix/core/services/api_exception.dart';
 import 'package:phizix/features/articles/models/article_model.dart';
+import 'package:phizix/features/articles/models/article_pagination.dart';
 import 'package:phizix/features/articles/repositories/article_repository.dart';
 import 'package:phizix/features/articles/viewmodels/articles_view_model.dart';
 import 'package:phizix/core/enums/view_state.dart';
 
-class MockArticleRepository extends Mock implements ArticleRepository{}
+class MockArticleRepository extends Mock implements ArticleRepository {}
 
-Article fakeArticle() => Article(  
+Article fakeArticle() => Article(
   title: 'Test Article',
   slug: 'test-article',
   excerpt: 'Test excerpt',
@@ -18,38 +19,50 @@ Article fakeArticle() => Article(
   publishedAt: DateTime(2024, 1, 1),
 );
 
-void main(){
+ArticlePagination fakePage({
+  List<Article>? articles,
+  int currentPage = 1,
+  int totalPages = 2,
+  int totalItems = 20,
+}) => ArticlePagination(
+  articles: articles ?? [fakeArticle()],
+  currentPage: currentPage,
+  totalPages: totalPages,
+  totalItems: totalItems,
+);
+
+void main() {
   late MockArticleRepository mockRepository;
   late ArticlesViewModel viewModel;
 
-  setUp((){
+  setUp(() {
     mockRepository = MockArticleRepository();
     viewModel = ArticlesViewModel(mockRepository);
   });
 
-  group('initial state', (){
-
-    test('starts with idle state', (){
+  group('initial state', () {
+    test('starts with idle state', () {
       expect(viewModel.state, ViewState.idle);
     });
 
-    test('starts with empty articles list', (){
+    test('starts with empty articles list', () {
       expect(viewModel.articles, isEmpty);
     });
 
-    test('starts with empty error message', (){
+    test('starts with empty error message', () {
       expect(viewModel.errorMessage, '');
     });
 
-    test('isLoading is false initially', (){
+    test('isLoading is false initially', () {
       expect(viewModel.isLoading, false);
     });
   });
 
-  group('loadArticles', (){
-    test('state is loading then success on success', ()async {
-      when(() => mockRepository.getArticles(page: 1))
-      .thenAnswer((_) async => [fakeArticle()]);
+  group('loadArticles', () {
+    test('state is loading then success on success', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenAnswer((_) async => fakePage());
 
       final future = viewModel.loadArticles();
       expect(viewModel.state, ViewState.loading);
@@ -61,9 +74,10 @@ void main(){
       expect(viewModel.isLoading, false);
     });
 
-    test('articles are populated on success', () async{
-      when(() => mockRepository.getArticles(page: 1))
-      .thenAnswer((_) async => [fakeArticle()]);
+    test('articles are populated on success', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenAnswer((_) async => fakePage());
 
       await viewModel.loadArticles();
 
@@ -71,18 +85,20 @@ void main(){
       expect(viewModel.articles.first.title, 'Test Article');
     });
 
-    test('error message is cleared on success', () async{
-      when(() => mockRepository.getArticles(page: 1))
-      .thenAnswer((_) async => [fakeArticle()]);
+    test('error message is cleared on success', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenAnswer((_) async => fakePage());
 
       await viewModel.loadArticles();
 
       expect(viewModel.errorMessage, '');
     });
 
-    test('state is error when repository throws generic exception', () async{
-      when(() => mockRepository.getArticles(page: 1))
-      .thenThrow(Exception('Something failed'));
+    test('state is error when repository throws generic exception', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenThrow(Exception('Something failed'));
 
       await viewModel.loadArticles();
 
@@ -90,25 +106,33 @@ void main(){
       expect(viewModel.errorMessage, 'Something went wrong');
     });
 
-    test('shows ApiException message on DioException with ApiException', () async{
-      final apiException = ApiException(message: 'Article not found', statusCode: 404);
-      final dioException = DioException(
-        requestOptions: RequestOptions(path: '/article'),
-        error: apiException,
-      );
+    test(
+      'shows ApiException message on DioException with ApiException',
+      () async {
+        final apiException = ApiException(
+          message: 'Article not found',
+          statusCode: 404,
+        );
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/article'),
+          error: apiException,
+        );
 
-      when(() => mockRepository.getArticles(page: 1))
-      .thenThrow(dioException);
+        when(
+          () => mockRepository.getArticlesWithPagination(page: 1),
+        ).thenThrow(dioException);
 
-      await viewModel.loadArticles();
+        await viewModel.loadArticles();
 
-      expect(viewModel.state, ViewState.error);
-      expect(viewModel.errorMessage, 'Article not found');
-    });
+        expect(viewModel.state, ViewState.error);
+        expect(viewModel.errorMessage, 'Article not found');
+      },
+    );
 
-    test('articles list is empty on error', () async{
-      when(() => mockRepository.getArticles(page: 1))
-      .thenThrow(Exception('fail'));
+    test('articles list is empty on error', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenThrow(Exception('fail'));
 
       await viewModel.loadArticles();
 
@@ -116,10 +140,11 @@ void main(){
     });
   });
 
-  group('refreshArticles', (){
+  group('refreshArticles', () {
     test('behaves same as loadArticles on success', () async {
-      when(() => mockRepository.getArticles(page: 1))
-      .thenAnswer((_) async => [fakeArticle()]);
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenAnswer((_) async => fakePage());
 
       await viewModel.refreshArticles();
 
@@ -128,15 +153,17 @@ void main(){
     });
   });
 
-  group('retry', (){
-    test('recovers from error state on success', () async{
-      when(() => mockRepository.getArticles(page: 1))
-      .thenThrow(Exception('fail'));
+  group('retry', () {
+    test('recovers from error state on success', () async {
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenThrow(Exception('fail'));
       await viewModel.loadArticles();
       expect(viewModel.state, ViewState.error);
 
-      when(() => mockRepository.getArticles(page: 1))
-      .thenAnswer((_) async => [fakeArticle()]);
+      when(
+        () => mockRepository.getArticlesWithPagination(page: 1),
+      ).thenAnswer((_) async => fakePage());
       await viewModel.retry();
 
       expect(viewModel.state, ViewState.success);

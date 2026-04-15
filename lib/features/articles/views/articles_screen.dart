@@ -20,28 +20,23 @@ class ArticlesScreen extends StatelessWidget {
 class _ArticlesContent extends StatelessWidget {
   const _ArticlesContent();
 
+  static const int _prefetchThreshold = 3;
+
   @override
   Widget build(BuildContext context) {
     final viewModel = context.watch<ArticlesViewModel>();
-  
 
     // Handle different states
     switch (viewModel.state) {
       case ViewState.loading:
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      
+        return const Center(child: CircularProgressIndicator());
+
       case ViewState.error:
         return Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(
-                Icons.error_outline,
-                size: 64,
-                color: Colors.red,
-              ),
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
               const SizedBox(height: 16),
               Text(
                 'Error loading articles',
@@ -69,26 +64,32 @@ class _ArticlesContent extends StatelessWidget {
             ],
           ),
         );
-      
+
       case ViewState.success:
         if (viewModel.articles.isEmpty) {
-          return const Center(
-            child: Text('No articles found'),
-          );
+          return const Center(child: Text('No articles found'));
         }
-        
+
         return RefreshIndicator(
           onRefresh: () => viewModel.refreshArticles(),
           child: ListView.builder(
             padding: const EdgeInsets.symmetric(vertical: 8),
             itemCount: viewModel.articles.length,
             itemBuilder: (context, index) {
+              final shouldPrefetch =
+                  viewModel.hasMore &&
+                  index >= viewModel.articles.length - _prefetchThreshold;
+
+              if (shouldPrefetch) {
+                viewModel.loadMoreArticles();
+              }
+
               final article = viewModel.articles[index];
               return ArticleCard(article: article);
             },
           ),
         );
-      
+
       default:
         return const SizedBox.shrink();
     }
