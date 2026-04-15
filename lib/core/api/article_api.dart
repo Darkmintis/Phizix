@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:phizix/features/articles/models/article_detail_model.dart';
+import 'package:phizix/features/articles/models/filtered_articles_response.dart';
 import 'package:phizix/features/categories/models/category_model.dart';
 import 'package:phizix/features/tags/models/tag_model.dart';
 import '../../features/authors/models/author_model.dart';
@@ -15,15 +16,15 @@ abstract class ArticleApi {
   @GET('/article')
   Future<ArticleResponse> getArticles(@Query("page") int page);
 
-  @GET('/article')
-  Future<ArticleResponse> getArticlesByCategory(
-    @Query("category") String categorySlug,
+  @GET('/category/{slug}')
+  Future<FilteredArticlesResponse> getCategoryBySlug(
+    @Path("slug") String categorySlug,
     @Query("page") int page,
   );
 
-  @GET('/article')
-  Future<ArticleResponse> getArticlesByTag(
-    @Query("tag") String tagSlug,
+  @GET('/tag/{slug}')
+  Future<FilteredArticlesResponse> getTagBySlug(
+    @Path("slug") String tagSlug,
     @Query("page") int page,
   );
 

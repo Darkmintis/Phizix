@@ -47,31 +47,28 @@ class _ArticleApi implements ArticleApi {
   }
 
   @override
-  Future<ArticleResponse> getArticlesByCategory(
+  Future<FilteredArticlesResponse> getCategoryBySlug(
     String categorySlug,
     int page,
   ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{
-      r'category': categorySlug,
-      r'page': page,
-    };
+    final queryParameters = <String, dynamic>{r'page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ArticleResponse>(
+    final _options = _setStreamType<FilteredArticlesResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/article',
+            '/category/${categorySlug}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ArticleResponse _value;
+    late FilteredArticlesResponse _value;
     try {
-      _value = ArticleResponse.fromJson(_result.data!);
+      _value = FilteredArticlesResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;
@@ -80,25 +77,28 @@ class _ArticleApi implements ArticleApi {
   }
 
   @override
-  Future<ArticleResponse> getArticlesByTag(String tagSlug, int page) async {
+  Future<FilteredArticlesResponse> getTagBySlug(
+    String tagSlug,
+    int page,
+  ) async {
     final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{r'tag': tagSlug, r'page': page};
+    final queryParameters = <String, dynamic>{r'page': page};
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<ArticleResponse>(
+    final _options = _setStreamType<FilteredArticlesResponse>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/article',
+            '/tag/${tagSlug}',
             queryParameters: queryParameters,
             data: _data,
           )
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late ArticleResponse _value;
+    late FilteredArticlesResponse _value;
     try {
-      _value = ArticleResponse.fromJson(_result.data!);
+      _value = FilteredArticlesResponse.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

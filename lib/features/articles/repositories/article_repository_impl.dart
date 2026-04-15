@@ -26,8 +26,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
     String categorySlug, {
     int page = 1,
   }) async {
-    final response = await _api.getArticlesByCategory(categorySlug, page);
-    return response.results;
+    final response = await _api.getCategoryBySlug(categorySlug, page);
+    return response.articles.results;
   }
 
   @override
@@ -35,14 +35,17 @@ class ArticleRepositoryImpl implements ArticleRepository {
     String categorySlug, {
     int page = 1,
   }) async {
-    final response = await _api.getArticlesByCategory(categorySlug, page);
-    return _mapPaginationResponse(response.results, response.pagination);
+    final response = await _api.getCategoryBySlug(categorySlug, page);
+    return _mapPaginationResponse(
+      response.articles.results,
+      response.articles.pagination,
+    );
   }
 
   @override
   Future<List<Article>> getArticlesByTag(String tagSlug, {int page = 1}) async {
-    final response = await _api.getArticlesByTag(tagSlug, page);
-    return response.results;
+    final response = await _api.getTagBySlug(tagSlug, page);
+    return response.articles.results;
   }
 
   @override
@@ -50,8 +53,11 @@ class ArticleRepositoryImpl implements ArticleRepository {
     String tagSlug, {
     int page = 1,
   }) async {
-    final response = await _api.getArticlesByTag(tagSlug, page);
-    return _mapPaginationResponse(response.results, response.pagination);
+    final response = await _api.getTagBySlug(tagSlug, page);
+    return _mapPaginationResponse(
+      response.articles.results,
+      response.articles.pagination,
+    );
   }
 
   ArticlePagination _mapPaginationResponse(

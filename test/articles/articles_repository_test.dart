@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:phizix/core/api/article_api.dart';
 import 'package:phizix/features/articles/models/article_model.dart';
+import 'package:phizix/features/articles/models/filtered_articles_response.dart';
 import 'package:phizix/features/articles/models/article_response.dart';
 import 'package:phizix/features/articles/repositories/article_repository.dart';
 import 'package:phizix/features/articles/repositories/article_repository_impl.dart';
@@ -61,51 +62,55 @@ void main() {
 
   group('getArticlesByCategory', () {
     test('returns category filtered articles', () async {
-      when(() => mockApi.getArticlesByCategory('astrophysics', 1)).thenAnswer(
-        (_) async => ArticleResponse(results: [fakeArticle()], pagination: {}),
+      when(() => mockApi.getCategoryBySlug('astrophysics', 1)).thenAnswer(
+        (_) async => FilteredArticlesResponse(
+          articles: ArticleResponse(results: [fakeArticle()], pagination: {}),
+        ),
       );
 
       final result = await repository.getArticlesByCategory('astrophysics');
 
       expect(result.length, 1);
-      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+      verify(() => mockApi.getCategoryBySlug('astrophysics', 1)).called(1);
     });
 
     test('throws when category request fails', () async {
       when(
-        () => mockApi.getArticlesByCategory('astrophysics', 1),
+        () => mockApi.getCategoryBySlug('astrophysics', 1),
       ).thenThrow(Exception('Network error'));
 
       expect(
         () => repository.getArticlesByCategory('astrophysics'),
         throwsException,
       );
-      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+      verify(() => mockApi.getCategoryBySlug('astrophysics', 1)).called(1);
     });
   });
 
   group('getArticlesByTag', () {
     test('returns tag filtered articles', () async {
-      when(() => mockApi.getArticlesByTag('nanomaterials', 1)).thenAnswer(
-        (_) async => ArticleResponse(results: [fakeArticle()], pagination: {}),
+      when(() => mockApi.getTagBySlug('nanomaterials', 1)).thenAnswer(
+        (_) async => FilteredArticlesResponse(
+          articles: ArticleResponse(results: [fakeArticle()], pagination: {}),
+        ),
       );
 
       final result = await repository.getArticlesByTag('nanomaterials');
 
       expect(result.length, 1);
-      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
+      verify(() => mockApi.getTagBySlug('nanomaterials', 1)).called(1);
     });
 
     test('throws when tag request fails', () async {
       when(
-        () => mockApi.getArticlesByTag('nanomaterials', 1),
+        () => mockApi.getTagBySlug('nanomaterials', 1),
       ).thenThrow(Exception('Network error'));
 
       expect(
         () => repository.getArticlesByTag('nanomaterials'),
         throwsException,
       );
-      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
+      verify(() => mockApi.getTagBySlug('nanomaterials', 1)).called(1);
     });
   });
 
@@ -157,10 +162,12 @@ void main() {
 
   group('getArticlesByCategoryWithPagination', () {
     test('returns paginated category filtered articles', () async {
-      when(() => mockApi.getArticlesByCategory('astrophysics', 1)).thenAnswer(
-        (_) async => ArticleResponse(
-          results: [fakeArticle()],
-          pagination: {'page': 1, 'total_pages': 3, 'count': 12},
+      when(() => mockApi.getCategoryBySlug('astrophysics', 1)).thenAnswer(
+        (_) async => FilteredArticlesResponse(
+          articles: ArticleResponse(
+            results: [fakeArticle()],
+            pagination: {'page': 1, 'pages': 3, 'count': 12},
+          ),
         ),
       );
 
@@ -172,16 +179,18 @@ void main() {
       expect(result.currentPage, 1);
       expect(result.totalPages, 3);
       expect(result.totalItems, 12);
-      verify(() => mockApi.getArticlesByCategory('astrophysics', 1)).called(1);
+      verify(() => mockApi.getCategoryBySlug('astrophysics', 1)).called(1);
     });
   });
 
   group('getArticlesByTagWithPagination', () {
     test('returns paginated tag filtered articles', () async {
-      when(() => mockApi.getArticlesByTag('nanomaterials', 1)).thenAnswer(
-        (_) async => ArticleResponse(
-          results: [fakeArticle()],
-          pagination: {'page': 2, 'total_pages': 4, 'count': 24},
+      when(() => mockApi.getTagBySlug('nanomaterials', 1)).thenAnswer(
+        (_) async => FilteredArticlesResponse(
+          articles: ArticleResponse(
+            results: [fakeArticle()],
+            pagination: {'page': 2, 'pages': 4, 'count': 24},
+          ),
         ),
       );
 
@@ -193,7 +202,7 @@ void main() {
       expect(result.currentPage, 2);
       expect(result.totalPages, 4);
       expect(result.totalItems, 24);
-      verify(() => mockApi.getArticlesByTag('nanomaterials', 1)).called(1);
+      verify(() => mockApi.getTagBySlug('nanomaterials', 1)).called(1);
     });
   });
 }
