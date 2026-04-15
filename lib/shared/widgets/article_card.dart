@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:phizix/core/constants/app_routes.dart';
 import 'package:phizix/features/articles/models/article_model.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ArticleCard extends StatelessWidget {
   final Article article;
 
-  const ArticleCard({
-    super.key,
-    required this.article,
-  });
+  const ArticleCard({super.key, required this.article});
 
   @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         borderRadius: BorderRadius.circular(12),
         onTap: () {
@@ -35,24 +31,29 @@ class ArticleCard extends StatelessWidget {
               if (article.featureImage.isNotEmpty)
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    article.featureImage,
+                  child: CachedNetworkImage(
+                    imageUrl: article.featureImage,
                     height: 180,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        height: 180,
-                        color: Colors.grey[300],
-                        child: const Center(
-                          child: Icon(
-                            Icons.broken_image,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
+                    placeholder: (context, url) => Container(
+                      height: 180,
+                      color: Colors.grey[200],
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      height: 180,
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          size: 48,
+                          color: Colors.grey,
                         ),
-                      );
-                    },
+                      ),
+                    ),
                   ),
                 ),
               const SizedBox(height: 12),
@@ -68,28 +69,18 @@ class ArticleCard extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 article.excerpt,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                 maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 12),
               Row(
                 children: [
-                  Icon(
-                    Icons.calendar_today,
-                    size: 14,
-                    color: Colors.grey[500],
-                  ),
+                  Icon(Icons.calendar_today, size: 14, color: Colors.grey[500]),
                   const SizedBox(width: 4),
                   Text(
                     _formatDate(article.publishedAt),
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                   ),
                 ],
               ),
